@@ -58,7 +58,7 @@ LLVM_EXTERNAL_PROJECTS=$(
       $LLVM_ADDITIONAL_EXTERNAL_PROJECTS")
   do
     printf "%s" "$delim$TARGET"
-    delim=","
+    delim=";"
   done
 )
 
