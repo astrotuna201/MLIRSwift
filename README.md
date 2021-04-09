@@ -2,8 +2,6 @@
 
 This project intends to make MLIR APIs accessible from Swift via the MLIR C Bindings.
 
-**DISCLAIMER:** This project is a work in progress. Currently, it is more of a proof-of-concept, so expect things to be incomplete and to change without notice.
-
 ## Usage
 
 The best reference for how to use this package will always be the tests ([Module Tests](Tests/DialectTests/Module%20Tests.swift) is probably the most interesting), and I recommend consulting them for more details.
