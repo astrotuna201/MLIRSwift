@@ -1,11 +1,11 @@
-
 import XCTest
+
 @testable import MLIR
 
 final class TypeTests: XCTestCase {
   func testInteger() {
     let context = MLIR.OwnedContext()
-    
+
     func test(
       _ source: String,
       parsesAs type: ContextualType,
@@ -18,10 +18,14 @@ final class TypeTests: XCTestCase {
         XCTFail(file: file, line: line)
       }
     }
-    
+
     test("i1", parsesAs: IntegerType.integer(bitWidth: 1))
     test("si1", parsesAs: IntegerType.integer(.signed, bitWidth: 1))
     test("ui1", parsesAs: IntegerType.integer(.unsigned, bitWidth: 1))
-    test("memref<?xf32>", parsesAs: MemoryReferenceType.memoryReference(to: Float32Type.float32, withDimensions: [.dynamic], inMemorySpace: IntegerAttribute.integer(type: .integer(bitWidth: 64), value: 0)))
+    test(
+      "memref<?xf32>",
+      parsesAs: MemoryReferenceType.memoryReference(
+        to: Float32Type.float32, withDimensions: [.dynamic],
+        inMemorySpace: IntegerAttribute.integer(type: .integer(bitWidth: 64), value: 0)))
   }
 }

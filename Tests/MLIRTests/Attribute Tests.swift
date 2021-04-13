@@ -1,12 +1,12 @@
-import XCTest
-@testable import MLIR
-
 import CMLIR
+import XCTest
+
+@testable import MLIR
 
 final class AttributeTests: XCTestCase {
   func testAttributes() throws {
     let context = MLIR.OwnedContext()
-    
+
     func test(
       _ source: String,
       parsesAs attribute: ContextualAttribute,
@@ -21,13 +21,17 @@ final class AttributeTests: XCTestCase {
     }
 
     test(#""foo""#, parsesAs: StringAttribute.string("foo"))
-    
-    test(#"["foo", "bar"]"#, parsesAs: ArrayAttribute.array([.string("foo"), StringAttribute.string("bar")]))
+
+    test(
+      #"["foo", "bar"]"#,
+      parsesAs: ArrayAttribute.array([.string("foo"), StringAttribute.string("bar")]))
     /// When Swift 5.4 is released, we will be able to do the following:
-//    test(#"["foo", "bar"]"#, parsesAs: .array([.string("foo"), .string("bar")]))
-    
-    test(#"{foo = "bar"}"#, parsesAs: DictionaryAttribute.dictionary(["foo": StringAttribute.string("bar")]))
+    //    test(#"["foo", "bar"]"#, parsesAs: .array([.string("foo"), .string("bar")]))
+
+    test(
+      #"{foo = "bar"}"#,
+      parsesAs: DictionaryAttribute.dictionary(["foo": StringAttribute.string("bar")]))
     /// When Swift 5.4 is released, we will be able to do the following:
-//     test(#"{foo = "bar"}"#, parsesAs: .dictionary(["foo": StringAttribute.string("bar")]))
+    //     test(#"{foo = "bar"}"#, parsesAs: .dictionary(["foo": StringAttribute.string("bar")]))
   }
 }

@@ -14,7 +14,7 @@ if [[ "$1" == "--ci" ]]; then
     echo "--ci cannot be used with any other arguments" 1>&2
     exit 1
   fi
-  swift-format --mode format --in-place --recursive Sources
+  swift-format --mode format --in-place --recursive Sources Tests
 else
   swift-format $@
 fi
