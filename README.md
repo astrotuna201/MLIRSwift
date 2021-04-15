@@ -6,6 +6,8 @@ This project intends to make MLIR APIs accessible from Swift via the MLIR C Bind
 
 The best reference for how to use this package is currently the tests ([Module Tests](Tests/DialectTests/Module%20Tests.swift) is probably the most interesting).
 
+If you are looking for an example of using MLIRSwift to bind MLIR dialects, check out [Edith](https://github.com/circt/Edith) which uses MLIRSwift to bind dialects from [CIRCT](https://github.com/llvm/circt).
+
 ## MLIR
 
 ### Installation
