@@ -12,7 +12,7 @@ The best reference for how to use this package is currently the tests ([Module T
 
 MLIR is build using the LLVM build infrastructure which uses `cmake`. This is incompatible with Swift Package Manager, so for now developers will need to install MLIR separately in order for this project to work. Once the MLIR C API settles and Swift Package Manager get better support for binary targets on Linux, we will likely make this dependency available as a precompiled binary. 
 
-In the meantime, you can manually install MLIR using the `Tools/build-dependencies` script. This script requires recent versions of `cmake` and `ninja` to be present on your macine. These can be installed on macOS using Homebrew (`brew install cmake ninja`) or on Ubuntu via `apt-get` (`apt-get install cmake ninja-build`). Linux systems might also require the `libncursesw5-dev` and `python3` packages.
+In the meantime, you can manually install MLIR using the `Tools/build-dependencies` script. This script requires recent versions of `cmake` and `ninja` to be present on your macine. These can be installed on macOS using Homebrew (`brew install cmake ninja`) or on Ubuntu via `apt-get` (`apt-get install cmake ninja-build`). Linux systems might also require the `libncurses5-dev` and `python3` packages.
 
 ### Troubleshooting
 
