@@ -1,7 +1,6 @@
 module CMLIR [system] {
   header "CMLIR.h"
   
-  /// For now, we link the entire contents of lib
   link "LLVMBinaryFormat"
   link "LLVMBitstreamReader"
   link "LLVMCore"
@@ -19,6 +18,8 @@ module CMLIR [system] {
   link "MLIRCastInterfaces"
   link "MLIRControlFlowInterfaces"
   link "MLIRCopyOpInterface"
+  link "MLIRDataLayoutInterfaces"
+  link "MLIRDialect"
   link "MLIRDialectUtils"
   link "MLIREDSC"
   link "MLIRIR"
@@ -26,6 +27,8 @@ module CMLIR [system] {
   link "MLIRLinalg"
   link "MLIRLoopAnalysis"
   link "MLIRLoopLikeInterface"
+  link "MLIRMemRef"
+  link "MLIRMemRefUtils"
   link "MLIRPDL"
   link "MLIRPDLInterp"
   link "MLIRPDLToPDLInterp"
@@ -37,6 +40,7 @@ module CMLIR [system] {
   link "MLIRSideEffectInterfaces"
   link "MLIRStandard"
   link "MLIRSupport"
+  link "MLIRSupportIndentedOstream"
   link "MLIRSwiftSupport"
   link "MLIRTensor"
   link "MLIRTransformUtils"

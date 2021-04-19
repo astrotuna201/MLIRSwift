@@ -71,7 +71,6 @@ final class ModuleTests: XCTestCase {
         ^bb0(%arg0: i1, %arg1: i1):  // no predecessors
           "std.return"(%arg1, %arg0) : (i1, i1) -> ()
         }) {sym_name = "swap", type = (i1, i1) -> (i1, i1)} : () -> ()
-        "module_terminator"() : () -> ()
       }) : () -> ()
 
       """
@@ -95,7 +94,7 @@ final class ModuleTests: XCTestCase {
 
     let parsed: Module = try context.parse(reference)
 
-    XCTAssertEqual(parsed.body.operations.count, 2)
+    XCTAssertEqual(parsed.body.operations.count, 1)
     /// Includes the module terminator
     XCTAssertEqual(parsed.operation.regions.count, 1)
     XCTAssertEqual(parsed.operation.regions.first?.blocks.count, 1)

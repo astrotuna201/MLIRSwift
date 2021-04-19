@@ -1,35 +1,8 @@
 module CDialects [system] {
   header "CDialects.h"
 
-  // CAPI
-  link "MLIRCAPISCF"
+  /**
+   We currently link all dependencies in CMLIR (because I haven't written a good script to list the transitive dependencies of targets). Eventually, we hope to separate out the dependencies only required by CDialects
+   */
   link "MLIRCAPIStandard"
-  
-  // Dependencies
-  link "LLVMBinaryFormat"
-  link "LLVMBitstreamReader"
-  link "LLVMCore"
-  link "LLVMDemangle"
-  link "LLVMRemarks"
-  link "LLVMSupport"
-  link "MLIRAffine"
-  link "MLIRAnalysis"
-  link "MLIRCAPIIR"
-  link "MLIRCallInterfaces"
-  link "MLIRCastInterfaces"
-  link "MLIRControlFlowInterfaces"
-  link "MLIREDSC"
-  link "MLIRIR"
-  link "MLIRInferTypeOpInterface"
-  link "MLIRLinalg"
-  link "MLIRLoopLikeInterface"
-  link "MLIRParser"
-  link "MLIRPass"
-  link "MLIRSCF"
-  link "MLIRSideEffectInterfaces"
-  link "MLIRStandard"
-  link "MLIRSupport"
-  link "MLIRTensor"
-  link "MLIRVectorInterfaces"
-  link "MLIRViewLikeInterface"
 }
