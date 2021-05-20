@@ -87,10 +87,7 @@ if [[ "$LLVM_REPO" != "local" ]]; then
   echo " - Checkout commit ${LLVM_COMMIT} from ${LLVM_REPO} to ${LLVM_REPO_PATH}"
 fi
 echo " - Build LLVM from ${LLVM_ROOT}"
-echo "   - The following targets will be built:"
-for TARGET in "${LLVM_INSTALL_TARGETS[@]}"; do
-  echo "       $TARGET"
-done
+echo "   - $(echo ${#LLVM_INSTALL_TARGETS[@]}) targets will be built"
 if [[ ! ${#LLVM_ADDITIONAL_CMAKE_ARGS_ARRAY[@]} -eq 0 ]]; then
   echo "   - Additional cmake arguments:"
   for ARG in "${LLVM_ADDITIONAL_CMAKE_ARGS_ARRAY[@]}"; do
