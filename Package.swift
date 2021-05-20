@@ -27,7 +27,7 @@ let package = Package(
 
     .systemLibrary(
       name: "CDialects",
-      pkgConfig: "LLVM-for-Swift"),
+      pkgConfig: "MLIR-for-Swift"),
     .target(
       name: "Dialects",
       dependencies: ["CDialects", "MLIR"]),
