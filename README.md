@@ -25,7 +25,7 @@ Unfortunately, Xcode seems to only check certain well known locations for `.pc` 
 
 #### Stale caches when updating pkg-config file
 
-Sometimes, if you change the contents of the pkg-config file (creating it for the first time, or switching between install directories) Xcode will not pick up this change, even after quitting and re-opening. The solution to this is to delete Xcode's "DerivedData" directory, which can be located by going to "Preferences" > "Locations" (an arrow by the path will open that location in Finder). An advanced approach is to store DerivedData "Relative" to the project (I use ".xcode/DerivedData" as the path). This way, it is easier to delete from the command line.
+Sometimes, if you change the contents of the pkg-config file (creating it for the first time, or switching between install directories) Xcode will not pick up this change, even after quitting and re-opening. The solution to this is to delete Xcode's "DerivedData" directory, which can be located by going to "Preferences" > "Locations" (an arrow by the path will open that location in Finder). An advanced approach is to store DerivedData "Relative" to the project (I use ".build/DerivedData" as the path). This way, it is easier to delete from the command line.
 
 ### Updating
 
