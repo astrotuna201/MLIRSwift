@@ -20,7 +20,7 @@ jobs:
         os: [macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      # This sequence of steps must match the sequence below in the validate job
+      # This sequence of steps must match the sequence below in the validate job with one exception: We skip checking the Swift version (which is slow) when building dependencies if we hit the cache.
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Cache Dependencies
@@ -28,14 +28,21 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .dependencies/installed
-          key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('Tools/llvm-commit', 'Tools/build-dependencies', 'Sources/*/module.modulemap', 'Tools/SwiftFormat/Package.swift') }}
+          key: ${{ runner.os }}-dependencies-v3-${{ hashFiles('Tools/llvm-commit', 'Tools/build-dependencies', 'Sources/*/module.modulemap', 'Tools/SwiftFormat/Package.swift') }}
+      - name: Ensure correct Swift version
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        uses: fwal/setup-swift@v1
+        with:
+          swift-version: "5.4"
       - name: Install Ninja
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Clone, Build and Install Dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: |
-          PKG_CONFIG_PATH=.dependencies/installed NO_INTERACTION=true Tools/build-dependencies
+        env:
+          PKG_CONFIG_PATH: .dependencies/installed
+          NO_INTERACTION: true 
+        run: Tools/build-dependencies
   
   # Validate this commit
   validate:
@@ -49,20 +56,27 @@ jobs:
       # The following sequence of steps must match the sequence above in build-dependencies
       - name: Checkout Repo
         uses: actions/checkout@v2
+      - name: Ensure correct Swift version
+        uses: fwal/setup-swift@v1
+        with:
+          swift-version: "5.4"
       - name: Cache Dependencies
         id: cache-dependencies
         uses: actions/cache@v2
         with:
           path: .dependencies/installed
-          key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('Tools/llvm-commit', 'Tools/build-dependencies', 'Sources/*/module.modulemap', 'Tools/SwiftFormat/Package.swift') }}
+          key: ${{ runner.os }}-dependencies-v3-${{ hashFiles('Tools/llvm-commit', 'Tools/build-dependencies', 'Sources/*/module.modulemap', 'Tools/SwiftFormat/Package.swift') }}
       - name: Install Ninja
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         uses: seanmiddleditch/gha-setup-ninja@master
       - name: Clone, Build and Install Dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: |
-          PKG_CONFIG_PATH=.dependencies/installed NO_INTERACTION=true Tools/build-dependencies
-          
+        env:
+          PKG_CONFIG_PATH: .dependencies/installed
+          NO_INTERACTION: true 
+          REQUIRE_SWIFT_FORMAT: true
+        run: Tools/build-dependencies
+
       # Actually validate this commit
       
       - name: Validate Generated Code

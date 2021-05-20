@@ -35,7 +35,7 @@ public extension ContextualNamedAttributeProtocol where Self == ContextualNamedA
   static func symbolName(_ name: String) -> Self {
     ContextualNamedAttribute(
       name: "sym_name",
-      attribute: StringAttribute.string(name))
+      attribute: name)
   }
 }
 
@@ -45,6 +45,6 @@ public extension ContextualNamedAttributeProtocol where Self == ContextualNamedA
   static func type(_ type: ContextualType) -> Self {
     ContextualNamedAttribute(
       name: "type",
-      attribute: TypeAttribute.type(type))
+      attribute: type)
   }
 }

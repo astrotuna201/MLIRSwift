@@ -2,18 +2,12 @@ import CMLIR
 
 // MARK: - String
 
-public struct StringAttribute: ContextualAttribute {
-  public let value: String
+extension String: ContextualAttribute {
   public func `in`(_ context: Context) -> Attribute {
     Attribute(
-      value.withUnsafeMlirStringRef {
+      withUnsafeMlirStringRef {
         mlirStringAttrGet(context.mlir, $0)
       })
-  }
-}
-extension ContextualAttribute where Self == StringAttribute {
-  public static func string(_ value: String) -> Self {
-    StringAttribute(value: value)
   }
 }
 
@@ -28,49 +22,50 @@ public struct IntegerAttribute: ContextualAttribute {
 }
 extension ContextualAttribute where Self == IntegerAttribute {
   public static func integer(
-    type: IntegerType,
-    value: Int
+    _ value: Int,
+    of type: IntegerType
   ) -> Self {
     IntegerAttribute(type: type, value: value)
   }
-}
 
-// MARK: - Type
-
-public struct TypeAttribute: ContextualAttribute {
-  public let type: ContextualType
-  public func `in`(_ context: Context) -> Attribute {
-    Attribute(mlirTypeAttrGet(type.in(context).mlir))
-  }
-}
-public extension ContextualAttribute where Self == TypeAttribute {
-  static func type(_ type: ContextualType) -> Self {
-    TypeAttribute(type: type)
+  /**
+   Convenience constructor for integer attributes
+   */
+  public static func integer(
+    _ value: Int,
+    _ signedness: IntegerType.Signedness? = nil, bitWidth: Int
+  ) -> Self {
+    IntegerAttribute(type: .integer(signedness, bitWidth: bitWidth), value: value)
   }
 }
 
 // MARK: - Array
 
-public struct ArrayAttribute: ContextualAttribute {
-  public let elements: [ContextualAttribute]
+extension Array: ContextualAttribute where Element: ContextualAttribute {
   public func `in`(_ context: Context) -> Attribute {
-    elements
-      .map { $0.in(context) }
+    map { $0.in(context) }
       .withUnsafeMlirRepresentation { elements in
         Attribute(mlirArrayAttrGet(context.mlir, elements.count, elements.baseAddress))
       }
   }
 }
-public extension ContextualAttribute where Self == ArrayAttribute {
-  static func array(_ elements: [ContextualAttribute]) -> Self {
-    ArrayAttribute(elements: elements)
-  }
-  static func array(_ elements: ContextualAttribute...) -> Self {
-    ArrayAttribute(elements: elements)
-  }
-}
 
 // MARK: - Dictionary
+
+extension Dictionary: ContextualAttribute where Key == String, Value: ContextualAttribute {
+  public func `in`(_ context: Context) -> Attribute {
+    map { pair in
+      ContextualNamedAttribute(
+        name: pair.key,
+        attribute: pair.value
+      )
+      .in(context)
+    }
+    .withUnsafeMlirRepresentation { elements in
+      Attribute(mlirDictionaryAttrGet(context.mlir, elements.count, elements.baseAddress))
+    }
+  }
+}
 
 public struct DictionaryAttribute: ContextualAttribute {
   public let elements: [ContextualNamedAttributeProtocol]
@@ -88,20 +83,6 @@ public extension ContextualAttribute where Self == DictionaryAttribute {
   }
   static func dictionary(_ elements: ContextualNamedAttributeProtocol...) -> Self {
     DictionaryAttribute(elements: elements)
-  }
-  static func dictionary<Pairs: Sequence>(_ pairs: Pairs) -> Self
-  where
-    Pairs.Element == (key: String, value: ContextualAttribute)
-  {
-    .dictionary(pairs.map(NameContextualAttributePair.init))
-  }
-}
-
-private struct NameContextualAttributePair: ContextualNamedAttributeProtocol {
-  let name: String
-  let attribute: ContextualAttribute
-  func `in`(_ context: Context) -> NamedAttribute {
-    NamedAttribute(name: name, attribute: attribute.in(context))
   }
 }
 

@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Tests (Linux)",
+      "program": "${workspaceFolder}/.build/debug/MLIRPackageTests.xctest",
+      "args": [
+        // You could add test filters here
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build",
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Tests (macOS)",
+      "program": "/Applications/Xcode.app/Contents/Developer/usr/bin/xctest",
+      "args": [
+        "${workspaceFolder}/.build/debug/MLIRPackageTests.xctest",
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build",
+    },
+  ]
+}

@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# This script requires that `swift-format` is installed using `build-dependendencies`. It also standardizes which files are processed for formatting.
+# This script requires that `swift-format` is installed using `build-dependendencies`. It also provides the `--ci` flag which runs `swift-format` how it would be run in CI
 
 PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd "$(git rev-parse --show-toplevel)" && pwd )"
 
 function swift-format() {
-  # TODO: Add --parallel once Swift 5.4 is released
-  "$PROJECT_ROOT/.dependencies/installed/tools/swift-format" $@
+  if [[ -z "$DEPENDENCIES_ROOT" ]]; then 
+    "$PROJECT_ROOT/.dependencies/installed/tools/swift-format" $@
+  else 
+    "$DEPENDENCIES_ROOT/installed/tools/swift-format" $@
+  fi
 }
 
 if [[ "$1" == "--ci" ]]; then

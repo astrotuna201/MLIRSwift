@@ -26,6 +26,6 @@ final class TypeTests: XCTestCase {
       "memref<?xf32>",
       parsesAs: MemoryReferenceType.memoryReference(
         to: Float32Type.float32, withDimensions: [.dynamic],
-        inMemorySpace: IntegerAttribute.integer(type: .integer(bitWidth: 64), value: 0)))
+        inMemorySpace: .integer(0, bitWidth: 64)))
   }
 }

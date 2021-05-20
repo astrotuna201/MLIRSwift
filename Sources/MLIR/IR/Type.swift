@@ -3,7 +3,7 @@ import CMLIR
 /**
  A representation of an MLIR type that is independent of a context
  */
-public protocol ContextualType {
+public protocol ContextualType: ContextualAttribute {
   func `in`(_ context: Context) -> Type
 }
 
@@ -36,6 +36,17 @@ public struct Type: ContextualType, MlirRepresentable {
 
   /// Suppress synthesized initializer
   private init() { fatalError() }
+}
+
+// MARK: - Attributes
+
+extension ContextualType {
+  /**
+   Types can be used as attributes
+   */
+  public func `in`(_ context: Context) -> Attribute {
+    Attribute(mlirTypeAttrGet(self.in(context).mlir))
+  }
 }
 
 // MARK: - Equality

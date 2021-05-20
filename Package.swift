@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.4
 import PackageDescription
 
 let package = Package(
@@ -17,14 +17,14 @@ let package = Package(
   targets: [
     .systemLibrary(
       name: "CMLIR",
-      pkgConfig: "LLVM-for-Swift"),
+      pkgConfig: "MLIR-for-Swift"),
     .target(
       name: "MLIR",
       dependencies: ["CMLIR"]),
     .testTarget(
       name: "MLIRTests",
       dependencies: ["MLIR"]),
-    
+
     .systemLibrary(
       name: "CDialects",
       pkgConfig: "LLVM-for-Swift"),

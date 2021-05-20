@@ -4,18 +4,29 @@
 # $ docker build -t mlir-swift Tools/Docker
 # $ docker run --rm -ti -v $(pwd):/project -w /project mlir-swift
 
-# You can also build an image with the nightly toolchain like so:
+# This project is also setup to work with VSCode remote containers: https://code.visualstudio.com/docs/remote/containers
+# Simply open this project in VSCode with the "Remote Containers" extension installed, and it should provide you the option of reopening the project inside a container.
+
+# You can also build an image with a different swift toolchain toolchain like so:
 # $ docker build -t mlir-swift Tools/Docker --build-arg image=swiftlang/swift:nightly-focal
 
-ARG image=swift:focal
+ARG image=swift:5.4-focal
 FROM $image
 
-RUN apt-get update && apt-get upgrade -y
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y git
-RUN apt-get install -y libncurses5-dev libncursesw5-dev
-RUN apt-get install -y cmake ninja-build python3
-ENV DEPENDENCIES_ROOT="/project/.dependencies/linux"
-ENV LLVM_REPO_PATH="/project/.dependencies/llvm-repo"
+RUN \
+  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    cmake \
+    git \
+    libncurses5-dev \
+    ninja-build \
+    python3
+
+# We want Linux build artifacts to be able to coexist with macOS, but we would like them to share an LLVM checkout
+ENV WORKSPACE_ROOT="/workspaces/MLIRSwift"
+ENV DEPENDENCIES_ROOT="$WORKSPACE_ROOT/.dependencies/linux"
+ENV LLVM_REPO_PATH="$WORKSPACE_ROOT/.dependencies/llvm-repo"
 ENV PKG_CONFIG_PATH="$DEPENDENCIES_ROOT/installed"
-RUN swift --version
+
+# Add tools to path
+ENV PATH="$WORKSPACE_ROOT/Tools:${PATH}"

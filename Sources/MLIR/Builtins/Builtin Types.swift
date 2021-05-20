@@ -115,8 +115,8 @@ public struct MemoryReferenceType: ContextualType {
   }
 }
 extension ContextualType where Self == MemoryReferenceType {
-  public static func memoryReference(
-    to element: ContextualType,
+  public static func memoryReference<Element: ContextualType>(
+    to element: Element,
     withDimensions dimensions: [MemoryReferenceType.Size],
     inMemorySpace memorySpace: IntegerAttribute
   )

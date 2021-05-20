@@ -95,7 +95,6 @@ final class ModuleTests: XCTestCase {
     let parsed: Module = try context.parse(reference)
 
     XCTAssertEqual(parsed.body.operations.count, 1)
-    /// Includes the module terminator
     XCTAssertEqual(parsed.operation.regions.count, 1)
     XCTAssertEqual(parsed.operation.regions.first?.blocks.count, 1)
 

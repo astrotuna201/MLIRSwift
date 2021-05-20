@@ -35,12 +35,12 @@ LLVM_SYSTEM_LIBRARY_TARGETS="
   $LLVM_ADDITIONAL_SYSTEM_LIBRARY_TARGETS"
 TOOLS_INSTALL_PATH="$DEPENDENCIES_ROOT/installed/tools"
 PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-/usr/local/lib/pkgconfig}
-PKG_CONFIG_FILE_PATH="$PKG_CONFIG_PATH/LLVM-for-Swift.pc"
+PKG_CONFIG_FILE_PATH="$PKG_CONFIG_PATH/MLIR-for-Swift.pc"
 PKG_CONFIG=$(cat << EOF
 prefix=$INSTALL_PATH
 
-Name: LLVM for Swift
-Description: LLVM, potentially with additional projects. Installed using Tools/build-dependencies in MLIRSwift.
+Name: MLIR for Swift
+Description: MLIR, potentially with additional projects. Installed using Tools/build-dependencies in MLIRSwift.
 Version: local
 Cflags: -I\${prefix}/include
 Libs: -lcurses $(
@@ -54,6 +54,7 @@ EOF
 LLVM_EXTERNAL_PROJECTS=$(
   delim=""
   for TARGET in $(echo "
+      MLIRSwiftTableGen
       MLIRSwiftSupport
       $LLVM_ADDITIONAL_EXTERNAL_PROJECTS")
   do
@@ -62,13 +63,14 @@ LLVM_EXTERNAL_PROJECTS=$(
   done
 )
 
-# Create a list of install targets with some extra ceremony so they up as a bash array
+# Create a list of install targets with some extra ceremony so they end up as a bash array
 LLVM_INSTALL_TARGETS=()
 for TARGET in $(echo "$(
   for SYSTEM_LIBRARY_TARGET in $LLVM_SYSTEM_LIBRARY_TARGETS; do
     sed -n 's/link "\(.*\)"/install-\1/p' < "$SYSTEM_LIBRARY_TARGET/module.modulemap"
   done;
   echo "
+    mlirswift-tblgen
     install-MLIRSwiftSupport-headers
     install-llvm-headers
     install-mlir-headers
@@ -153,6 +155,7 @@ which ccache > /dev/null && LLVM_CCACHE_BUILD="ON"
   -DLLVM_ENABLE_BINDINGS=OFF \
   -DLLVM_ENABLE_ASSERTIONS=ON \
   -DLLVM_EXTERNAL_PROJECTS="$LLVM_EXTERNAL_PROJECTS" \
+  -DLLVM_EXTERNAL_MLIRSWIFTTABLEGEN_SOURCE_DIR="${TOOLS_ROOT}/MLIRSwiftTableGen" \
   -DLLVM_EXTERNAL_MLIRSWIFTSUPPORT_SOURCE_DIR="${TOOLS_ROOT}/MLIRSwiftSupport" \
   "${LLVM_ADDITIONAL_CMAKE_ARGS_ARRAY[@]}")
 (set -x; cmake \
@@ -169,7 +172,7 @@ if [[ -n "$PKG_CONFIG_FILE_PATH" ]]; then
 fi
 
 # Install swift-format
-if [[ ! -f "$TOOLS_INSTALL_PATH/swift-format" ]]; then
+if [[ "$SKIP_SWIFT_FORMAT" != "true" ]] && [[ ! -f "$TOOLS_INSTALL_PATH/swift-format" ]]; then
   echo "Installing swift-format"
   # `swift build` doesn't seem to actually build the swift-format executable (likely because it is a dependency), so we use `swift run`. Also, the first invocatin of this fails for some reason in dependent projects.
   swift run --package-path "$TOOLS_ROOT/SwiftFormat" -c release swift-format --version || \
