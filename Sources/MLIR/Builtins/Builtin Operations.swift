@@ -13,7 +13,7 @@ extension Operation where Results == () {
 
     var attributes = attributes
 
-    /// These will hopefully be able to use dot syntax as Swift 5.4 matures
+    /// These will hopefully be able to use dot syntax in Swift 5.5
     attributes.append(ContextualNamedAttribute.symbolName(name))
     attributes.append(
       ContextualNamedAttribute.type(

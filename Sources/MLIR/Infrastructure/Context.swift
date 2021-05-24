@@ -21,11 +21,12 @@ public final class OwnedContext: Context {
   /**
    Creates a context loaded with the specified dialects
    */
-  public init(dialects: Dialect...) {
+  public init(dialects: Dialect..., allowUnregisteredDialects: Bool = false) {
     mlir = mlirContextCreate()
     for dialect in dialects {
       _ = mlirDialectHandleLoadDialect(dialect.mlir, mlir)
     }
+    mlirContextSetAllowUnregisteredDialects(mlir, allowUnregisteredDialects)
   }
   deinit {
     mlirContextDestroy(mlir)
