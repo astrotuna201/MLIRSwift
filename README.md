@@ -29,7 +29,7 @@ Sometimes, if you change the contents of the pkg-config file (creating it for th
 
 ### Updating
 
-We do not include MLIR (llvm) as a submodule, because this would cause Swift Pacakge Manager to pull in all of LLVM in any project depending on MLIRSwift. Instead, we store the hash we care about in `Tools/llvm-commit` file, update this file to a new commit to update MLIR. Note that this file _must_ be a hash and not a branch like `main`, since the contents of this file is used to cache the LLVM build on GitHub Actions. 
+We do not include MLIR (llvm) as a submodule, because this would cause Swift Package Manager to pull in all of LLVM in any project depending on MLIRSwift. Instead, we store the hash we care about in `Tools/llvm-commit` file, update this file to a new commit to update MLIR. Note that this file _must_ be a hash and not a branch like `main`, since the contents of this file is used to cache the LLVM build on GitHub Actions.
 
 ### Using an external MLIR checkout
 
